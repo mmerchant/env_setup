@@ -64,7 +64,7 @@ def main():
     install_vundle(HOME_DIR)
 
     # Create VIM undo directory
-    UNDO_DIR = '{0}/.vim/undodir/'
+    UNDO_DIR = '{0}/.vim/undodir/'.format(HOME_DIR)
     make_vim_undo_dir(HOME_DIR, UNDO_DIR)
 
     # Create VIMRC file
