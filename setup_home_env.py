@@ -312,6 +312,9 @@ def main():
     UNDO_DIR = '{0}/.vim/undodir/'
     make_vim_undo_dir(HOME_DIR, UNDO_DIR)
 
+    # Create VIMRC file
+    make_vimrc(HOME_DIR)
+
     # Install Vundle Plug-ins
     install_vundle_plugins(HOME_DIR)
 
