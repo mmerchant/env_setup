@@ -21,7 +21,7 @@ def make_vim_undo_dir(HOME_DIR, UNDO_DIR):
 def make_vimrc(HOME_DIR):
     # Copy vimrc_settings_file.txt file to user's home dir
     source_file = '{0}/{1}'.format(os.getcwd(), 'vimrc_settings_file.txt')
-    destination = '{0}/'.format(HOME_DIR)
+    destination = '{0}/.vimrc'.format(HOME_DIR)
     cp(source_file, destination)
 
 
@@ -54,7 +54,7 @@ def install_tmux(HOME_DIR):
 def make_tmux_config(HOME_DIR):
     # Copy tmux_settings_file.txt file to user's home dir
     source_file = '{0}/{1}'.format(os.getcwd(), 'tmux_settings_file.txt')
-    destination = '{0}/'.format(HOME_DIR)
+    destination = '{0}/.tmux.conf'.format(HOME_DIR)
     cp(source_file, destination)
 
 
