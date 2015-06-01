@@ -232,6 +232,7 @@ def install_vundle_plugins(HOME_DIR):
 def install_tmux(HOME_DIR):
     try:
         subprocess.check_output(['which', 'tmux'])
+        tmux_install_status = True
     except:
         operating_sys = platform.system().lower()
         if operating_sys == 'linux':
