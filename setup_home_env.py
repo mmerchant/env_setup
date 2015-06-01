@@ -235,7 +235,7 @@ def install_tmux(HOME_DIR):
     except:
         operating_sys = platform.system().lower()
         if operating_sys == 'linux':
-            install_command = 'apt-get install tmux'
+            install_command = 'sudo apt-get install tmux'
             tmux_install_status = True
         elif operating_sys == 'darwin':
             install_command = 'brew install tmux'
