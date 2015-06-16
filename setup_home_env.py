@@ -12,9 +12,12 @@ def _get_platform_os():
 
 
 def _install_vundle(HOME_DIR):
-    clone_command = "git clone https://github.com/gmarik/Vundle.vim.git {0}/.vim/bundle/Vundle.vim".format(HOME_DIR)
-    subprocess_clone_command = shlex.split(clone_command)
-    subprocess.call(subprocess_clone_command)
+    try:
+        clone_command = "git clone https://github.com/gmarik/Vundle.vim.git {0}/.vim/bundle/Vundle.vim".format(HOME_DIR)
+        subprocess_clone_command = shlex.split(clone_command)
+        subprocess.call(subprocess_clone_command)
+    except:
+        "\033[0;32mERROR:\033[0;37m\033[0;m Vundle already installed."
     return True
 
 
