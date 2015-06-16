@@ -124,6 +124,9 @@ def main():
     # Profile config
     _make_profile(HOME_DIR)
 
+    # Install TheFuck (https://github.com/nvbn/thefuck)
+    _install_thefuck(HOME_DIR)
+
 
 if __name__ == "__main__":
     main()
