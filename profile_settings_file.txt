@@ -1,0 +1,13 @@
+set -o vi
+
+export HOMEBREW_GITHUB_API_TOKEN=''
+export PGHOST=/tmp
+export HISTSIZE=''
+export PIP_ACCESS_KEY=
+export PIP_SECRET_KEY=
+
+export PATH=/usr/include/i386:/usr/local/bin:/usr/local/sbin:/usr/local/opt/ruby/bin:$PATH
+
+alias frick='$(thefuck $(fc -ln -1))'
+alias FRICK='frick'
+alias gitit='git pull --rebase'
