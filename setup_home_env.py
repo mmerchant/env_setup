@@ -11,6 +11,13 @@ def _get_platform_os():
     return platform.system().lower()
 
 
+def _install_dependencies():
+    install_command = "sudo apt-get install build-essential autoconf"
+    subprocess_install_command = shlex.split(install_command)
+    subprocess.call(subprocess_install_command)
+    return True
+
+
 def _install_vundle(HOME_DIR):
     try:
         if not os.path.isdir("{0}/.vim/bundle/Vundle.vim".format(HOME_DIR)):
@@ -100,6 +107,11 @@ def _install_thefuck(HOME_DIR):
 
 
 def main():
+    # Install OS Dependency
+    operating_sys = _get_platform_os()
+    if operating_sys == "linux":
+        _install_dependencies()
+    
     # Install Vundle (https://github.com/gmarik/Vundle.vim):
     HOME_DIR = os.path.expanduser("~")
     _install_vundle(HOME_DIR)
