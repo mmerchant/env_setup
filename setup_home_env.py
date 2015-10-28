@@ -12,7 +12,8 @@ def _get_platform_os():
 
 
 def _install_dependencies():
-    install_command = "sudo apt-get install build-essential autoconf python-dev python-pip"
+    install_command = ("sudo apt-get install "
+                       "build-essential autoconf python-dev python-pip")
     subprocess_install_command = shlex.split(install_command)
     subprocess.call(subprocess_install_command)
     return True
@@ -21,7 +22,9 @@ def _install_dependencies():
 def _install_vundle(HOME_DIR):
     try:
         if not os.path.isdir("{0}/.vim/bundle/Vundle.vim".format(HOME_DIR)):
-            clone_command = "git clone https://github.com/gmarik/Vundle.vim.git {0}/.vim/bundle/Vundle.vim".format(HOME_DIR)
+            clone_command = ("git clone "
+                             "https://github.com/gmarik/Vundle.vim.git "
+                             "{0}/.vim/bundle/Vundle.vim").format(HOME_DIR)
             subprocess_clone_command = shlex.split(clone_command)
             subprocess.call(subprocess_clone_command)
     except:
@@ -60,7 +63,8 @@ def _install_tmux(HOME_DIR):
         elif operating_sys == "darwin":
             install_command = "brew install tmux"
         else:
-            print "\033[0;31mERROR:\033[0;37m\033[0;m Could not determine your Operating System. Please install tmux manually."
+            print ("\033[0;31mERROR:\033[0;37m\033[0;m Could not determine "
+                   "your Operating System. Please install tmux manually.")
             return False
         subprocess_install_command = shlex.split(install_command)
         subprocess.call(subprocess_install_command)
@@ -78,17 +82,20 @@ def _make_tmux_config(HOME_DIR):
 def _make_profile(HOME_DIR):
     operating_sys = _get_platform_os()
     if operating_sys == "linux":
-        print "\033[0;31mERROR:\033[0;37m\033[0;m Don't have anything for you yet..."
+        print ("\033[0;31mERROR:\033[0;37m\033[0;m "
+               "Don't have anything for you yet...")
         return False
     elif operating_sys == "darwin":
-        source_file = "{0}/{1}".format(os.getcwd(), "profile_settings_file.txt")
+        source_file = "{0}/{1}".format(
+            os.getcwd(), "profile_settings_file.txt")
         destination = "{0}/.bash_profile".format(HOME_DIR)
         cp(source_file, destination)
         source_file = "{0}/{1}".format(os.getcwd(), "input_settings_file.txt")
         destination = "{0}/.inputrc".format(HOME_DIR)
         cp(source_file, destination)
     else:
-        print "\033[0;31mERROR:\033[0;37m\033[0;m Could not determine your Operating System. Setup your profile yourself."
+        print ("\033[0;31mERROR:\033[0;37m\033[0;m Could not determine your "
+               "Operating System. Setup your profile yourself.")
         return False
     return True
 
@@ -100,9 +107,19 @@ def _install_thefuck(HOME_DIR):
     elif operating_sys == "darwin":
         thefuck_install_command = "pip install thefuck"
     else:
-        print "\033[0;31mERROR:\033[0;37m\033[0;m Go to https://github.com/nvbn/thefuck to see how to install for your OS"
+        print ("\033[0;31mERROR:\033[0;37m\033[0;m Go to "
+               "https://github.com/nvbn/thefuck to see how "
+               "to install for your OS")
         return False
     subprocess.call(shlex.split(thefuck_install_command))
+    return True
+
+
+def _make_psqlrc(HOME_DIR):
+    # Copy psqlrc_settings_file.txt file to user's home dir
+    source_file = "{0}/{1}".format(os.getcwd(), "psqlrc_settings_file.txt")
+    destination = "{0}/.psqlrc".format(HOME_DIR)
+    cp(source_file, destination)
     return True
 
 
@@ -111,7 +128,7 @@ def main():
     operating_sys = _get_platform_os()
     if operating_sys == "linux":
         _install_dependencies()
-    
+
     # Install Vundle (https://github.com/gmarik/Vundle.vim):
     HOME_DIR = os.path.expanduser("~")
     _install_vundle(HOME_DIR)
@@ -138,6 +155,9 @@ def main():
 
     # Install TheFuck (https://github.com/nvbn/thefuck)
     _install_thefuck(HOME_DIR)
+
+    # Create PSQLRC file
+    _make_psqlrc(HOME_DIR)
 
 
 if __name__ == "__main__":
