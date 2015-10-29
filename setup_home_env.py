@@ -13,7 +13,8 @@ def _get_platform_os():
 
 def _install_dependencies():
     install_command = ("sudo apt-get install "
-                       "build-essential autoconf python-dev python-pip")
+                       "build-essential autoconf "
+                       "python-dev python-pip vim")
     subprocess_install_command = shlex.split(install_command)
     subprocess.call(subprocess_install_command)
     return True
