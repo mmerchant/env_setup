@@ -3,7 +3,7 @@ set -o vi
 export HOMEBREW_GITHUB_API_TOKEN=''
 export PGHOST=/tmp
 export HISTSIZE=''
-export PS1="[\$(date +%Y-%m-%d) @ \$(date +%k:%M:%S)] \u@\h \w$ "
+export PS1="[\$(date -u +%Y-%m-%d) @ \$(date -u +%k:%M:%S)+00] \u@\h \w$ "
 export PIP_ACCESS_KEY=
 export PIP_SECRET_KEY=
 
