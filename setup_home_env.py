@@ -116,6 +116,21 @@ def _install_thefuck(HOME_DIR):
     return True
 
 
+def _install_redshift_console(HOME_DIR):
+    operating_sys = _get_platform_os()
+    if operating_sys == "linux":
+        thefuck_install_command = "sudo pip install redshift-console"
+    elif operating_sys == "darwin":
+        thefuck_install_command = "pip install redshift-console"
+    else:
+        print ("\033[0;31mERROR:\033[0;37m\033[0;m Go to "
+               "https://github.com/everythingme/redshift_console to see how "
+               "to install for your OS")
+        return False
+    subprocess.call(shlex.split(thefuck_install_command))
+    return True
+
+
 def _make_psqlrc(HOME_DIR):
     # Copy psqlrc_settings_file.txt file to user's home dir
     source_file = "{0}/{1}".format(os.getcwd(), "psqlrc_settings_file.txt")
@@ -156,6 +171,14 @@ def main():
 
     # Install TheFuck (https://github.com/nvbn/thefuck)
     _install_thefuck(HOME_DIR)
+
+    # Install Redshift Console
+    answer = raw_input("Install Redshift Console "
+                       "(https://github.com/everythingme/redshift_console)? ")
+    if answer.upper() in ("Y", "YES"):
+        _install_redshift_console(HOME_DIR)
+    else:
+        continue
 
     # Create PSQLRC file
     _make_psqlrc(HOME_DIR)
