@@ -8,13 +8,18 @@ from shutil import copy2 as cp
 
 
 def _get_platform_os():
-    return platform.system().lower()
+    return platform.system().lower(), platform.release().lower()
 
 
-def _install_dependencies():
-    install_command = ("sudo apt-get install "
-                       "build-essential autoconf "
-                       "python-dev python-pip vim")
+def _install_dependencies(platform_release):
+    if "amazon" in platform_release:
+        install_command = ("sudo yum install "
+                           "python27-devel python27-pip gcc "
+                           "vim")
+    else:
+        install_command = ("sudo apt-get install "
+                           "build-essential autoconf "
+                           "python-dev python-pip vim")
     subprocess_install_command = shlex.split(install_command)
     subprocess.call(subprocess_install_command)
     return True
@@ -58,9 +63,12 @@ def _install_tmux(HOME_DIR):
     try:
         subprocess.check_output(["which", "tmux"])
     except:
-        operating_sys = _get_platform_os()
+        operating_sys, platform_release = _get_platform_os()
         if operating_sys == "linux":
-            install_command = "sudo apt-get install tmux"
+            if "amazon" in platform_release:
+                install_command = "sudo yum install tmux"
+            else:
+                install_command = "sudo apt-get install tmux"
         elif operating_sys == "darwin":
             install_command = "brew install tmux"
         else:
@@ -81,7 +89,7 @@ def _make_tmux_config(HOME_DIR):
 
 
 def _make_profile(HOME_DIR):
-    operating_sys = _get_platform_os()
+    operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
         print ("\033[0;31mERROR:\033[0;37m\033[0;m "
                "Don't have anything for you yet...")
@@ -102,7 +110,7 @@ def _make_profile(HOME_DIR):
 
 
 def _install_thefuck(HOME_DIR):
-    operating_sys = _get_platform_os()
+    operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
         thefuck_install_command = "sudo pip install thefuck"
     elif operating_sys == "darwin":
@@ -117,7 +125,7 @@ def _install_thefuck(HOME_DIR):
 
 
 def _install_redshift_console(HOME_DIR):
-    operating_sys = _get_platform_os()
+    operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
         thefuck_install_command = "sudo pip install redshift-console"
     elif operating_sys == "darwin":
@@ -141,9 +149,9 @@ def _make_psqlrc(HOME_DIR):
 
 def main():
     # Install OS Dependency
-    operating_sys = _get_platform_os()
+    operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
-        _install_dependencies()
+        _install_dependencies(platform_release)
 
     # Install Vundle (https://github.com/gmarik/Vundle.vim):
     HOME_DIR = os.path.expanduser("~")
