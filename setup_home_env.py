@@ -12,7 +12,7 @@ def _get_platform_os():
 
 
 def _install_dependencies(platform_release):
-    if "amazon" in platform_release:
+    if "amzn" in platform_release:
         install_command = ("sudo yum install "
                            "python27-devel python27-pip gcc "
                            "vim")
@@ -65,7 +65,7 @@ def _install_tmux(HOME_DIR):
     except:
         operating_sys, platform_release = _get_platform_os()
         if operating_sys == "linux":
-            if "amazon" in platform_release:
+            if "amzn" in platform_release:
                 install_command = "sudo yum install tmux"
             else:
                 install_command = "sudo apt-get install tmux"
