@@ -185,8 +185,6 @@ def main():
                        "(https://github.com/everythingme/redshift_console)? ")
     if answer.upper() in ("Y", "YES"):
         _install_redshift_console(HOME_DIR)
-    else:
-        continue
 
     # Create PSQLRC file
     _make_psqlrc(HOME_DIR)
