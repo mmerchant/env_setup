@@ -91,10 +91,34 @@ def _make_tmux_config(HOME_DIR):
 def _make_profile(HOME_DIR):
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
-        print ("\033[0;31mERROR:\033[0;37m\033[0;m "
-               "Don't have anything for you yet...")
-        return False
+        if "amzn" in platform_release:
+            print ("\033[0;31mERROR:\033[0;37m\033[0;m "
+                   "Don't have anything for you yet...")
+        else:
+            # Let's just create a backup of your bashrc in case
+            try:
+                source_file = "{0}/.bashrc".format(HOME_DIR)
+                destination = "{0}/.bashrc.bak".format(HOME_DIR)
+                cp(source_file, destination)
+            except:
+                pass
+            # Now we'll replace the file
+            source_file = "{0}/{1}".format(
+                os.getcwd(), "profile_settings_file.txt")
+            destination = "{0}/.bashrc".format(HOME_DIR)
+            cp(source_file, destination)
+            source_file = "{0}/{1}".format(os.getcwd(), "input_settings_file.txt")
+            destination = "{0}/.inputrc".format(HOME_DIR)
+            cp(source_file, destination)
+        return True
     elif operating_sys == "darwin":
+        # Let's just create a backup of your bashrc in case
+        try:
+            source_file = "{0}/.bash_profile".format(HOME_DIR)
+            destination = "{0}/.bash_profile.bak".format(HOME_DIR)
+        except:
+            pass
+        # Now we'll replace the file
         source_file = "{0}/{1}".format(
             os.getcwd(), "profile_settings_file.txt")
         destination = "{0}/.bash_profile".format(HOME_DIR)
