@@ -171,6 +171,23 @@ def _make_psqlrc(HOME_DIR):
     return True
 
 
+def _set_hostname():
+    operating_sys, platform_release = _get_platform_os()
+    if operating_sys == "linux":
+        if "amzn" in platform_release:
+            print "Can't set the hostname yet."
+        else:
+            new_hostname = raw_input("Enter hostname for this machine: ")
+            if new_hostname:
+                set_hostname_command = "sudo hostname {0}".format(new_hostname)
+                subprocess.call(shlex.split(set_hostname_command))
+            else:
+                print "No hostname given. None set."
+    else:
+        return False
+    return True
+
+
 def main():
     # Install OS Dependency
     operating_sys, platform_release = _get_platform_os()
@@ -212,6 +229,9 @@ def main():
 
     # Create PSQLRC file
     _make_psqlrc(HOME_DIR)
+
+    # Set hostname for machine
+    _set_hostname()
 
 
 if __name__ == "__main__":
