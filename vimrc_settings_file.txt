@@ -14,6 +14,7 @@ Plugin 'mattn/gist-vim'
 Plugin 'vim-scripts/PyChimp'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bronson/vim-crosshairs'
+Plugin 'nvie/vim-flake8'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -196,3 +197,7 @@ map! <Esc>OS -
 highlight CursorLine   cterm=NONE ctermbg=235
 highlight CursorColumn cterm=NONE ctermbg=235
 nnoremap <Leader>c :set cursorline cursorcolumn<CR>
+
+" PEP8 indentation
+au BufNewFile,BufRead *.py set textwidth=79
+au BufNewFile,BufRead *.py set fileformat=unix
