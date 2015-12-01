@@ -15,7 +15,7 @@ export HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # Format [YYYY-mm-dd @ HH:MM:SS+00] user@host ~$
-export PS1="[\$(date -u +%Y-%m-%d) @ \e[5m\$(date -u +%k:%M:%S)+00\e[25m] \u@\h \w$ "
+export PS1="[\$(date -u +%Y-%m-%d) @ \$(date -u +%k:%M:%S)+00] \u@\h \w $"
 
 # Get Redshift host, username and password.
 if [ -f $HOME/.pgpass ]
