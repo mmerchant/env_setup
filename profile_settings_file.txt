@@ -20,9 +20,9 @@ export PS1="[\$(date -u +%Y-%m-%d) @ \$(date -u +%k:%M:%S)+00] \u@\h \w $"
 # Get Redshift host, username and password.
 if [ -f $HOME/.pgpass ]
 then
-    rs_host=`cat .pgpass | tail -1 | grep -m 1 -i flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com | cut -d : -f 1`
-    rs_user=`cat .pgpass | tail -1 | grep -m 1 -i flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com | cut -d : -f 4`
-    rs_pass=`cat .pgpass | tail -1 | grep -m 1 -i flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com | cut -d : -f 5`
+    rs_host=`cat .pgpass | grep -m 1 -i "flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 1`
+    rs_user=`cat .pgpass | grep -m 1 -i "flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 4`
+    rs_pass=`cat .pgpass | grep -m 1 -i "flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 5`
     export REDSHIFT_CONNECTION_STRING="user=$rs_user password=$rs_pass host=$rs_host port=5439 dbname=dev"
 fi
 
