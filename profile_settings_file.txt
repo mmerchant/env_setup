@@ -14,8 +14,11 @@ export HISTCONTROL=ignoreboth
 # Append to history, don't overwrite it
 shopt -s histappend
 
-# Format [YYYY-mm-dd @ HH:MM:SS+00] user@host ~$
-export PS1="[\$(date -u +%Y-%m-%d) @ \$(date -u +%k:%M:%S)+00] \u@\h \w $"
+# Format
+# user@host [Mon Dec 28 12:20 PM]  ~
+# <1>:
+export PS1='\n\[\033[01;31m\]\u@\h\[\033[01;36m\] [\d \@] \[\033[01;33m\] \w\n\[\033[00m\]<\#>:'
+export PS2="\[\033[1m\]> \[\033[0m\]"
 
 # Get Redshift host, username and password.
 if [ -f $HOME/.pgpass ]
