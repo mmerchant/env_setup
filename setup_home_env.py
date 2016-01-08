@@ -177,7 +177,9 @@ def _set_hostname():
         if "amzn" in platform_release:
             print "Can't set the hostname yet."
         else:
-            new_hostname = raw_input("Enter hostname for this machine: ")
+            new_hostname = raw_input(
+                "\033[0;31mEnter hostname for this machine: \033[0;37m\033[0;m"
+                )
             if new_hostname:
                 set_hostname_command = "sudo hostname {0}".format(new_hostname)
                 subprocess.call(shlex.split(set_hostname_command))
@@ -237,7 +239,7 @@ def main():
     _install_thefuck(HOME_DIR)
 
     # Install Redshift Console
-    answer = raw_input("Install Redshift Console "
+    answer = raw_input("\033[0;31mInstall Redshift Console:\033[0;37m\033[0;m "
                        "(https://github.com/everythingme/redshift_console)? ")
     if answer.upper() in ("Y", "YES"):
         _install_redshift_console(HOME_DIR)
