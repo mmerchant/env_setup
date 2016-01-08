@@ -188,6 +188,21 @@ def _set_hostname():
     return True
 
 
+def _install_autovenv(HOME_DIR):
+    operating_sys, platform_release = _get_platform_os()
+    if operating_sys == "linux":
+        thefuck_install_command = "sudo pip install autovenv"
+    elif operating_sys == "darwin":
+        thefuck_install_command = "pip install autovenv"
+    else:
+        print ("\033[0;31mERROR:\033[0;37m\033[0;m Go to "
+               "https://autovenv.readthedocs.org/en/latest/ to see how "
+               "to install for your OS")
+        return False
+    subprocess.call(shlex.split(thefuck_install_command))
+    return True
+
+
 def main():
     # Install OS Dependency
     operating_sys, platform_release = _get_platform_os()
@@ -226,6 +241,9 @@ def main():
                        "(https://github.com/everythingme/redshift_console)? ")
     if answer.upper() in ("Y", "YES"):
         _install_redshift_console(HOME_DIR)
+
+    # Install autoenv helper
+    _install_autovenv(HOME_DIR)
 
     # Create PSQLRC file
     _make_psqlrc(HOME_DIR)
