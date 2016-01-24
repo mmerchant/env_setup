@@ -14,11 +14,48 @@ export HISTCONTROL=ignoreboth
 # Append to history, don't overwrite it
 shopt -s histappend
 
-# Format
-# user@host [Mon Dec 28 12:20 PM]  ~
-# <1>:
-export PS1='\n\[\033[01;31m\]\u@\h\[\033[01;36m\] [\d \@] \[\033[01;33m\] \w\n\[\033[00m\]<\#>:'
-export PS2="\[\033[1m\]> \[\033[0m\]"
+set_prompt()
+{
+    local last_cmd=$?
+    local txtreset='$(tput sgr0)'
+    local txtbold='$(tput bold)'
+    local txtblack='$(tput setaf 0)'
+    local txtred='$(tput setaf 1)'
+    local txtgreen='$(tput setaf 2)'
+    local txtyellow='$(tput setaf 3)'
+    local txtblue='$(tput setaf 4)'
+    local txtpurple='$(tput setaf 5)'
+    local txtcyan='$(tput setaf 6)'
+    local txtwhite='$(tput setaf 7)'
+    # unicode "✗"
+    local fancyx='\342\234\227'
+    # unicode "✓"
+    local checkmark='\342\234\223'
+    # Line 1:user@host [Date Time]
+    # Line 2: Line number
+    PS1="\n\[\033[01;31m\]\u@\h\[\033[01;36m\] [\d \@] \[\033[01;33m\] \w"
+    PS1+="\n\[\033[00m\]<\#>:"
+    #PS1="\[$txtbold\]\n\D{%A %d %B %Y %H:%M:%S}\n\[$txtgreen\]\w\n"
+    # User color: red for root, yellow for others
+    if [[ $EUID == 0 ]]; then
+        PS1+="\[$txtred\]"
+    else
+        PS1+="\[$txtyellow\]"
+    fi
+    # Line 4: a red "✗" or a green "✓" and the error number
+    if [[ $last_cmd == 0 ]]; then
+        PS1+="\[$txtgreen\]$checkmark"
+    else
+        PS1+="\[$txtred\]$fancyx ($last_cmd)"
+    fi
+    # Line 4: green git branch
+    PS1+="\[$txtgreen\]$(__git_ps1 ' (%s)')"
+    # Line 4: good old prompt, $ for user, # for root
+    PS1+=" \[\033[0m\]\\$ "
+    # git-bash-prompt from homebrew might replace this madness
+}
+
+PROMPT_COMMAND='set_prompt'
 
 # Get Redshift host, username and password.
 if [ -f $HOME/.pgpass ]
@@ -94,12 +131,75 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# Flootty aliases
+alias floome='flootty --url https://floobits.com/<project> --create <terminal_name>'
+
 # Git author
 alias mgit='git commit --author "MohammedAli Merchant <m@example.co>"'
-
 
 # autoenv helper (https://autovenv.readthedocs.org/en/latest/)
 source `which autovenv.sh`
 
-# Env vars for dev docker machine
-eval $(docker-machine env dev)
+# Docker is too long..
+alias dm='docker-machine'
+alias dml='docker-machine ls'
+docker_attach() {
+    if [ ! -z "$1" ]; then
+        docker exec -i -t $1 bash
+    else
+        echo "Provide a valid container ID"
+        docker ps -a
+    fi
+}
+alias dockls='docker ps -a'
+docker_env() {
+    if [ ! -z "$1" ]; then
+        eval $(docker-machine env $1)
+    else
+        echo "Provide a valid docker machine"
+        docker-machine ls
+    fi
+}
+
+# Enable AWScli auto complete
+complete -C aws_completer aws
+
+# Auto extract..aka don't worry about it
+extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1     ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar e $1     ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xf $1      ;;
+            *.tbz2)      tar xjf $1     ;;
+            *.tgz)       tar xzf $1     ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)     echo "'$1' cannot be extracted via extract()" ;;
+esac
+     else
+         echo "'$1' is not a valid file."
+     fi
+ }
+
+ # Sort by size
+ sbs() {
+     du -d 1 | sort -nr | perl -pe 's{([0-9]+)}{sprintf "%.1f%s", $1>=2**30? ($1/2**30, "G"): $1>=2**20? ($1/2**20, "M"): $1>=2**10? ($1/2**10, "K"): ($1, "")}e';
+ }
+
+ if [ -f $(brew --prefix)/etc/bash_completion ]; then
+     . $(brew --prefix)/etc/bash_completion
+ fi
+
+# Output man pages in postscript and open them in preview (thanks pwilson)
+pman() {
+    man -t $1 | open -f -a Preview
+}
+m2() {
+    open -a "Marked 2" $1
+}
+
