@@ -60,9 +60,9 @@ PROMPT_COMMAND='set_prompt'
 # Get Redshift host, username and password.
 if [ -f $HOME/.pgpass ]
 then
-    rs_host=`cat $HOME/.pgpass | grep -m 1 -i "flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 1`
-    rs_user=`cat $HOME/.pgpass | grep -m 1 -i "flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 4`
-    rs_pass=`cat $HOME/.pgpass | grep -m 1 -i "flowroute.cekzffdqrcts.us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 5`
+    rs_host=`cat $HOME/.pgpass | grep -m 1 -i "us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 1`
+    rs_user=`cat $HOME/.pgpass | grep -m 1 -i "us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 4`
+    rs_pass=`cat $HOME/.pgpass | grep -m 1 -i "us-west-2.redshift.amazonaws.com.*$USER" | tail -1 | cut -d : -f 5`
     export REDSHIFT_CONNECTION_STRING="user=$rs_user password=$rs_pass host=$rs_host port=5439 dbname=dev"
 fi
 
