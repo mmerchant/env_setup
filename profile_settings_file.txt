@@ -131,8 +131,21 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Flootty aliases
-alias floome='flootty --url https://floobits.com/<project> --create <terminal_name>'
+# Alias for flootty
+floo() {
+    if [ ! -z "$1" ]
+    then
+        if [ "$2" == "" ]; then
+            flootty --url https://floobits.com/<org>/$1 <user>
+        elif [ "$2" == "" ]; then
+            flootty --url https://floobits.com/<org>/$1 <user>
+        else
+            flootty --url https://floobits.com/<org>/$1 --create $USER_terminal
+        fi
+    else
+        echo "Specify workspace name (e.g. floo floodgate...)"
+    fi
+}
 
 # Git author
 alias mgit='git commit --author "MohammedAli Merchant <m@example.co>"'
@@ -203,3 +216,4 @@ m2() {
     open -a "Marked 2" $1
 }
 
+alias lookbusy='cat /dev/urandom | hexdump -C | grep "ca fe"'
