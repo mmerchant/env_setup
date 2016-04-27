@@ -14,48 +14,18 @@ export HISTCONTROL=ignoreboth
 # Append to history, don't overwrite it
 shopt -s histappend
 
-set_prompt()
-{
-    local last_cmd=$?
-    local txtreset='$(tput sgr0)'
-    local txtbold='$(tput bold)'
-    local txtblack='$(tput setaf 0)'
-    local txtred='$(tput setaf 1)'
-    local txtgreen='$(tput setaf 2)'
-    local txtyellow='$(tput setaf 3)'
-    local txtblue='$(tput setaf 4)'
-    local txtpurple='$(tput setaf 5)'
-    local txtcyan='$(tput setaf 6)'
-    local txtwhite='$(tput setaf 7)'
-    # unicode "✗"
-    local fancyx='\342\234\227'
-    # unicode "✓"
-    local checkmark='\342\234\223'
-    # Line 1:user@host [Date Time]
-    # Line 2: Line number
-    PS1="\n\[\033[01;31m\]\u@\h\[\033[01;36m\] [\d \@] \[\033[01;33m\] \w"
-    PS1+="\n\[\033[00m\]<\#>:"
-    #PS1="\[$txtbold\]\n\D{%A %d %B %Y %H:%M:%S}\n\[$txtgreen\]\w\n"
-    # User color: red for root, yellow for others
-    if [[ $EUID == 0 ]]; then
-        PS1+="\[$txtred\]"
-    else
-        PS1+="\[$txtyellow\]"
-    fi
-    # Line 4: a red "✗" or a green "✓" and the error number
-    if [[ $last_cmd == 0 ]]; then
-        PS1+="\[$txtgreen\]$checkmark"
-    else
-        PS1+="\[$txtred\]$fancyx ($last_cmd)"
-    fi
-    # Line 4: green git branch
-    PS1+="\[$txtgreen\]$(__git_ps1 ' (%s)')"
-    # Line 4: good old prompt, $ for user, # for root
-    PS1+=" \[\033[0m\]\\$ "
-    # git-bash-prompt from homebrew might replace this madness
-}
+# Use bash-git-prompt
 
-PROMPT_COMMAND='set_prompt'
+if [[ `uname` == 'Linux' ]]; then
+    GIT_PROMPT_ONLY_IN_REPO=1
+    source ~/.bash-git-prompt/gitprompt.sh
+elif [[ `uname` == 'Darwin' ]]; then
+    if [ -f "$(brew --prefix bash-git-prompt)/share/gitprompt.sh" ]; then
+        GIT_PROMPT_THEME=Default
+        source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
+    fi
+fi
+
 
 # Get Redshift host, username and password.
 if [ -f $HOME/.pgpass ]
@@ -204,16 +174,20 @@ esac
      du -d 1 | sort -nr | perl -pe 's{([0-9]+)}{sprintf "%.1f%s", $1>=2**30? ($1/2**30, "G"): $1>=2**20? ($1/2**20, "M"): $1>=2**10? ($1/2**10, "K"): ($1, "")}e';
  }
 
- if [ -f $(brew --prefix)/etc/bash_completion ]; then
+if [[ `uname` == 'Darwin' ]]; then
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
      . $(brew --prefix)/etc/bash_completion
- fi
+    fi
+fi
 
-# Output man pages in postscript and open them in preview (thanks pwilson)
-pman() {
-    man -t $1 | open -f -a Preview
-}
-m2() {
-    open -a "Marked 2" $1
-}
+if [[ `uname` == 'Darwin' ]]; then
+    # Output man pages in postscript and open them in preview (thanks pwilson)
+    pman() {
+        man -t $1 | open -f -a Preview
+    }
+    m2() {
+        open -a "Marked 2" $1
+    }
+fi
 
 alias lookbusy='cat /dev/urandom | hexdump -C | grep "ca fe"'

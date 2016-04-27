@@ -20,8 +20,13 @@ def _install_dependencies(platform_release):
         install_command = ("sudo apt-get install "
                            "build-essential autoconf "
                            "python-dev python-pip vim")
+        git_bash_command = ("git clone "
+                            "https://github.com/magicmonty/bash-git-prompt.git"
+                            " .bash-git-prompt --depth=1")
     subprocess_install_command = shlex.split(install_command)
+    git_install_command = shlex.split(git_bash_command)
     subprocess.call(subprocess_install_command)
+    subprocess.call(git_install_command)
     return True
 
 
