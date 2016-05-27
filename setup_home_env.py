@@ -6,6 +6,10 @@ import shlex
 import platform
 from shutil import copy2 as cp
 
+HOME_DIR = os.path.expanduser("~")
+ST_LOCATION = "{}/Library/Application Support/Sublime Text 3/Packages".format(
+    HOME_DIR)
+
 
 def _get_platform_os():
     return platform.system().lower(), platform.release().lower()
@@ -210,6 +214,24 @@ def _install_autovenv(HOME_DIR):
     return True
 
 
+def _install_custom_sublimetext_syntax(HOME_DIR):
+    operating_sys, platform_release = _get_platform_os()
+    if operating_sys == "darwin":
+        custom_configs = [
+            "https://github.com/pnlarsson/SublimeKamailioConfig.git"
+        ]
+        for custom_syntax in custom_configs:
+            proj_name = os.path.basename(custom_syntax).split(".")[0]
+            if os.path.isdir(ST_LOCATION):
+                git_cmd = ("git clone {} {}/{}".format(
+                    custom_syntax, ST_LOCATION, proj_name)
+                )
+                subprocess_install_command = shlex.split(git_cmd)
+                subprocess.call(subprocess_install_command)
+            else:
+                print("Update your Sublime Text location!")
+
+
 def main():
     # Install OS Dependency
     operating_sys, platform_release = _get_platform_os()
@@ -217,7 +239,6 @@ def main():
         _install_dependencies(platform_release)
 
     # Install Vundle (https://github.com/gmarik/Vundle.vim):
-    HOME_DIR = os.path.expanduser("~")
     _install_vundle(HOME_DIR)
 
     # Create VIM undo directory
@@ -258,6 +279,8 @@ def main():
     # Set hostname for machine
     _set_hostname()
 
+    # Install custom Sublime text syntax highlighting
+    _install_custom_sublimetext_syntax(HOME_DIR)
 
 if __name__ == "__main__":
     main()
