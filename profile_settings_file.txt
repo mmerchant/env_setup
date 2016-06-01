@@ -15,7 +15,7 @@ export HISTFILESIZE=""
 export HISTCONTROL=ignoreboth
 
 # Add time/date to history
-export HISTTIMEFORMAT="%y-%m-%d %T "
+export HISTTIMEFORMAT="%Y-%m-%d %T "
 
 # Append to history, don't overwrite it
 shopt -s histappend
