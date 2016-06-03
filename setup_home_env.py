@@ -256,7 +256,7 @@ def main():
     if tmux_install_status:
         _make_tmux_config(HOME_DIR)
     else:
-        print "\033[0;31mERROR:\033[0;37m\033[0;m tmux was not installed."
+        print("\033[0;31mERROR:\033[0;37m\033[0;m tmux was not installed.")
 
     # Profile config
     _make_profile(HOME_DIR)
