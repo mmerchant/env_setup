@@ -132,7 +132,7 @@ alias mgit='git commit --author "MohammedAli Merchant <m@example.co>"'
 source `which autovenv.sh`
 
 # Docker is too long..
-alias dml='docker-machine ls'
+alias dc='docker-compose'
 docker_attach() {
     if [ ! -z "$1" ]; then
         docker exec -i -t $1 bash
