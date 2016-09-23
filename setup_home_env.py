@@ -9,7 +9,15 @@ from shutil import copy2 as cp
 HOME_DIR = os.path.expanduser("~")
 ST_LOCATION = "{}/Library/Application Support/Sublime Text 3/Packages".format(
     HOME_DIR)
+PYTHON_VERSION = 2
 
+
+def _get_python_version():
+    global PYTHON_VERSION
+    try:
+        input = raw_input
+    except NameError:
+        PYTHON_VERSION = 3
 
 def _get_platform_os():
     return platform.system().lower(), platform.release().lower()
@@ -26,11 +34,14 @@ def _install_dependencies(platform_release):
                            "python-dev python-pip vim")
         git_bash_command = ("git clone "
                             "https://github.com/magicmonty/bash-git-prompt.git"
-                            " .bash-git-prompt --depth=1")
-    subprocess_install_command = shlex.split(install_command)
-    git_install_command = shlex.split(git_bash_command)
-    subprocess.call(subprocess_install_command)
-    subprocess.call(git_install_command)
+                            " {}/.bash-git-prompt --depth=1".format(HOME_DIR))
+    try:
+        subprocess_install_command = shlex.split(install_command)
+        git_install_command = shlex.split(git_bash_command)
+        subprocess.call(subprocess_install_command)
+        subprocess.call(git_install_command)
+    except:
+        pass
     return True
 
 
@@ -43,7 +54,7 @@ def _install_vundle(HOME_DIR):
             subprocess_clone_command = shlex.split(clone_command)
             subprocess.call(subprocess_clone_command)
     except:
-        print "\033[0;32mERROR:\033[0;37m\033[0;m Vundle already installed."
+        print("\033[0;32mERROR:\033[0;37m\033[0;m Vundle already installed.")
     return True
 
 
@@ -145,7 +156,7 @@ def _make_profile(HOME_DIR):
 def _install_thefuck(HOME_DIR):
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
-        thefuck_install_command = "sudo pip install thefuck"
+        thefuck_install_command = "sudo -H pip install thefuck"
     elif operating_sys == "darwin":
         thefuck_install_command = "pip install thefuck"
     else:
@@ -160,7 +171,7 @@ def _install_thefuck(HOME_DIR):
 def _install_redshift_console(HOME_DIR):
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
-        thefuck_install_command = "sudo pip install redshift-console"
+        thefuck_install_command = "sudo -H pip install redshift-console"
     elif operating_sys == "darwin":
         thefuck_install_command = "pip install redshift-console"
     else:
@@ -184,16 +195,16 @@ def _set_hostname():
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
         if "amzn" in platform_release:
-            print "Can't set the hostname yet."
+            print("Can't set the hostname yet.")
         else:
-            new_hostname = raw_input(
+            new_hostname = input(
                 "\033[0;31mEnter hostname for this machine: \033[0;37m\033[0;m"
                 )
             if new_hostname:
                 set_hostname_command = "sudo hostname {0}".format(new_hostname)
                 subprocess.call(shlex.split(set_hostname_command))
             else:
-                print "No hostname given. None set."
+                print("No hostname given. None set.")
     else:
         return False
     return True
@@ -202,7 +213,7 @@ def _set_hostname():
 def _install_autovenv(HOME_DIR):
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
-        thefuck_install_command = "sudo pip install autovenv"
+        thefuck_install_command = "sudo -H pip install autovenv"
     elif operating_sys == "darwin":
         thefuck_install_command = "pip install autovenv"
     else:
@@ -233,6 +244,10 @@ def _install_custom_sublimetext_syntax(HOME_DIR):
 
 
 def main():
+    # Check python version because of raw_input vs input:
+    global PYTHON_VERSION
+    print(PYTHON_VERSION)
+    PYTHON_VERSION = _get_python_version()
     # Install OS Dependency
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
@@ -265,7 +280,7 @@ def main():
     _install_thefuck(HOME_DIR)
 
     # Install Redshift Console
-    answer = raw_input("\033[0;31mInstall Redshift Console:\033[0;37m\033[0;m "
+    answer = input("\033[0;31mInstall Redshift Console:\033[0;37m\033[0;m "
                        "(https://github.com/everythingme/redshift_console)? ")
     if answer.upper() in ("Y", "YES"):
         _install_redshift_console(HOME_DIR)
@@ -281,6 +296,7 @@ def main():
 
     # Install custom Sublime text syntax highlighting
     _install_custom_sublimetext_syntax(HOME_DIR)
+    print(PYTHON_VERSION)
 
 if __name__ == "__main__":
     main()
