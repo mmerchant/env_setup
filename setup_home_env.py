@@ -19,6 +19,7 @@ def _get_python_version():
     except NameError:
         PYTHON_VERSION = 3
 
+
 def _get_platform_os():
     return platform.system().lower(), platform.release().lower()
 
@@ -127,7 +128,8 @@ def _make_profile(HOME_DIR):
                 os.getcwd(), "profile_settings_file.txt")
             destination = "{0}/.bashrc".format(HOME_DIR)
             cp(source_file, destination)
-            source_file = "{0}/{1}".format(os.getcwd(), "input_settings_file.txt")
+            source_file = "{0}/{1}".format(
+                os.getcwd(), "input_settings_file.txt")
             destination = "{0}/.inputrc".format(HOME_DIR)
             cp(source_file, destination)
         return True
@@ -281,7 +283,7 @@ def main():
 
     # Install Redshift Console
     answer = input("\033[0;31mInstall Redshift Console:\033[0;37m\033[0;m "
-                       "(https://github.com/everythingme/redshift_console)? ")
+                   "(https://github.com/everythingme/redshift_console)? ")
     if answer.upper() in ("Y", "YES"):
         _install_redshift_console(HOME_DIR)
 
