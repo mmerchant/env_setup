@@ -245,6 +245,12 @@ def _install_custom_sublimetext_syntax(HOME_DIR):
                 print("Update your Sublime Text location!")
 
 
+def _finish_ycm_installation(HOME_DIR):
+    os.system(
+        "{}/.vim/bundle/YouCompleteMe/install.py".format(HOME_DIR)
+    )
+
+
 def main():
     # Check python version because of raw_input vs input:
     global PYTHON_VERSION
@@ -267,6 +273,9 @@ def main():
 
     # Install Vundle Plug-ins
     _install_vundle_plugins(HOME_DIR)
+
+    # Install YouCompleteMe
+    _finish_ycm_installation(HOME_DIR)
 
     # Setup Tmux
     tmux_install_status = _install_tmux(HOME_DIR)
