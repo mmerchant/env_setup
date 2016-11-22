@@ -32,7 +32,7 @@ def _install_dependencies(platform_release):
     else:
         install_command = ("sudo apt-get install "
                            "build-essential autoconf "
-                           "python-dev python-pip vim")
+                           "python-dev python-pip vim cmake")
         git_bash_command = ("git clone "
                             "https://github.com/magicmonty/bash-git-prompt.git"
                             " {}/.bash-git-prompt --depth=1".format(HOME_DIR))
