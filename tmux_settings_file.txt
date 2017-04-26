@@ -45,3 +45,6 @@ set -g status-right '#[fg=Cyan]#S #[fg=white]%a %d %b %R'
 
 # History limit for scrollback lines
 set-option -g history-limit 5000
+
+# Enable toggle for multiplex
+bind-key a set-window-option synchronize-panes
