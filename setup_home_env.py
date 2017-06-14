@@ -16,6 +16,7 @@ def _get_python_version():
     global PYTHON_VERSION
     try:
         input = raw_input
+        PYTHON_VERSION = 2
     except NameError:
         PYTHON_VERSION = 3
 
@@ -194,14 +195,18 @@ def _make_psqlrc(HOME_DIR):
 
 
 def _set_hostname():
+    global PYTHON_VERSION
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
         if "amzn" in platform_release:
             print("Can't set the hostname yet.")
         else:
-            new_hostname = input(
-                "\033[0;31mEnter hostname for this machine: \033[0;37m\033[0;m"
-                )
+            msg = "\033[0;31mEnter hostname for this machine: \033[0;37m\033[0;m"
+            if PYTHON_VERSION == 3:
+                new_hostname = input(msg)
+            else:
+                new_hostname = raw_input(msg)
+
             if new_hostname:
                 set_hostname_command = "sudo hostname {0}".format(new_hostname)
                 subprocess.call(shlex.split(set_hostname_command))
@@ -236,7 +241,7 @@ def _install_custom_sublimetext_syntax(HOME_DIR):
         for custom_syntax in custom_configs:
             proj_name = os.path.basename(custom_syntax).split(".")[0]
             if os.path.isdir(ST_LOCATION):
-                git_cmd = ("git clone {} {}/{}".format(
+                git_cmd = ("git clone {} '{}/{}'".format(
                     custom_syntax, ST_LOCATION, proj_name)
                 )
                 subprocess_install_command = shlex.split(git_cmd)
@@ -254,8 +259,8 @@ def _finish_ycm_installation(HOME_DIR):
 def main():
     # Check python version because of raw_input vs input:
     global PYTHON_VERSION
-    print(PYTHON_VERSION)
     PYTHON_VERSION = _get_python_version()
+
     # Install OS Dependency
     operating_sys, platform_release = _get_platform_os()
     if operating_sys == "linux":
@@ -291,8 +296,12 @@ def main():
     _install_thefuck(HOME_DIR)
 
     # Install Redshift Console
-    answer = input("\033[0;31mInstall Redshift Console:\033[0;37m\033[0;m "
-                   "(https://github.com/everythingme/redshift_console)? ")
+    msg = ("\033[0;31mInstall Redshift Console:\033[0;37m\033[0;m "
+               "(https://github.com/everythingme/redshift_console)? ")
+    if PYTHON_VERSION == 3:
+        answer = input(msg)
+    else:
+        answer = raw_input(msg)
     if answer.upper() in ("Y", "YES"):
         _install_redshift_console(HOME_DIR)
 
@@ -307,7 +316,6 @@ def main():
 
     # Install custom Sublime text syntax highlighting
     _install_custom_sublimetext_syntax(HOME_DIR)
-    print(PYTHON_VERSION)
 
 if __name__ == "__main__":
     main()
